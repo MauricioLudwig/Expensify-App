@@ -3,42 +3,48 @@ import { connect } from 'react-redux';
 import { setTextFilter, sortByAmount, sortByDate, setStartDate, setEndDate } from '../actions/filters';
 import { DateRangePicker } from 'react-dates';
 
-class ExpenseListFilters extends React.Component {
+export class ExpenseListFilters extends React.Component {
 
     state = {
         calendarFocused: null
     };
 
     onDatesChange = ({ startDate, endDate }) => {
-        this.props.dispatch(setStartDate(startDate));
-        this.props.dispatch(setEndDate(endDate));
+        this.props.setStartDate(startDate);
+        this.props.setEndDate(endDate);
     };
 
     onFocusChange = (calendarFocused) => {
         this.setState(() => ({ calendarFocused }));
     };
 
+    onTextChange = (e) => {
+        this.props.setTextFilter(e.target.value);
+    };
+
+    onSortChange = (e) => {
+        const value = e.target.value;
+        switch (value) {
+            case 'date':
+                this.props.sortByDate();
+                break;
+            case 'amount':
+                this.props.sortByAmount();
+                break;
+        }
+    };
+
     render() {
         return (
             <div>
-                <input type="text" value={this.props.filters.text} onChange={(e) => {
-                    this.props.dispatch(setTextFilter(e.target.value));
-                }} />
+                <input
+                    type="text"
+                    value={this.props.filters.text}
+                    onChange={this.onTextChange}
+                />
                 <select
                     value={this.props.filters.sortBy}
-                    onChange={(e) => {
-
-                        const value = e.target.value;
-                        switch (value) {
-                            case 'date':
-                                this.props.dispatch(sortByDate());
-                                break;
-                            case 'amount':
-                                this.props.dispatch(sortByAmount());
-                                break;
-                        }
-
-                    }}>
+                    onChange={this.onSortChange}>
                     <option value="date">Date</option>
                     <option value="amount">Amount</option>
                 </select>
@@ -58,10 +64,16 @@ class ExpenseListFilters extends React.Component {
 
 }
 
-const mapStateToProps = (state) => {
-    return {
-        filters: state.filters
-    };
-};
+const mapStateToProps = (state) => ({
+    filters: state.filters
+});
 
-export default connect(mapStateToProps)(ExpenseListFilters);
+const mapDispatchToProps = (dispatch) => ({
+    setTextFilter: (text) => dispatch(setTextFilter(text)),
+    sortByDate: () => dispatch(sortByDate()),
+    sortByAmount: () => dispatch(sortByAmount()),
+    setStartDate: (startDate) => dispatch(setStartDate(startDate)),
+    setEndDate: (endDate) => dispatch(setEndDate(endDate))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ExpenseListFilters);
