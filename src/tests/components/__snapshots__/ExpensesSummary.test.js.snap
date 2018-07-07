@@ -3,7 +3,7 @@
 exports[`should generate snapshot of ExpensesSummary component 1`] = `
 <div>
   <p>
-    Viewing 3 expenses totaling $1,141.95
+    Viewing 3 expenses totalling $1,141.95
   </p>
 </div>
 `;
