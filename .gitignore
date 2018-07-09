@@ -1,6 +1,4 @@
 .DS_STORE
-node_modules
-public/dist/
 scripts/flow/*/.flowconfig
 *~
 *.pyc
@@ -24,3 +22,8 @@ chrome-user-data
 .vscode
 *.swp
 *.swo
+
+node_modules/
+public/dist/
+.env.test
+.env.development
